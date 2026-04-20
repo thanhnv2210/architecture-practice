@@ -1,0 +1,11 @@
+{
+  "documents": [
+    {
+      "id": "error-handling",
+      "title": "Error Handling Architecture",
+      "type": "markdown",
+      "path": "docs/error-handling.md",
+      "tags": ["microservice", "resilience"]
+    }
+  ]
+}
