@@ -189,3 +189,39 @@ body {
   color: #7d8590;
   font-weight: 600;
 }
+
+/* PlantUML body */
+.plantuml-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.plantuml-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7d8590;
+  margin-bottom: 8px;
+}
+
+.plantuml-source pre {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #e6edf3;
+}
+
+.plantuml-preview img {
+  max-width: 100%;
+  background: #fff;
+  border-radius: 6px;
+  padding: 16px;
+}

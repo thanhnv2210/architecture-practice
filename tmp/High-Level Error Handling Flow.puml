@@ -1,0 +1,53 @@
+@startuml
+title Reactive Error Handling Flow (WebFlux Microservice)
+
+actor Client
+participant "API Gateway / Controller" as Controller
+participant "Service Layer" as Service
+participant "Adapter Layer" as Adapter
+participant "Resilience Layer\n(Retry, Timeout, CircuitBreaker)" as Resilience
+participant "3rd Party API" as External
+participant "Global Error Handler" as ErrorHandler
+
+Client -> Controller : HTTP Request
+Controller -> Service : processRequest()
+
+Service -> Adapter : callExternal()
+
+Adapter -> Resilience : execute()
+
+Resilience -> External : HTTP Call
+
+alt Success
+    External --> Resilience : Response
+    Resilience --> Adapter : Response
+    Adapter --> Service : Domain Response
+    Service --> Controller : Response DTO
+    Controller --> Client : 200 OK
+
+else Timeout / Connection Error
+    External -x Resilience : Timeout / Connection Refused
+    Resilience --> Adapter : Mono.error(TechnicalException)
+    Adapter --> Service : Mono.error(AdapterException)
+    Service --> Controller : Mono.error(ServiceException)
+    Controller -> ErrorHandler : propagate error
+    ErrorHandler --> Client : 503 SERVICE_UNAVAILABLE
+
+else HTTP Error (4xx/5xx)
+    External --> Resilience : HTTP Error Response
+    Resilience --> Adapter : Mono.error(HttpException)
+    Adapter --> Service : Mono.error(DomainException)
+    Service --> Controller : Mono.error()
+    Controller -> ErrorHandler
+    ErrorHandler --> Client : mapped error (400/502)
+
+else Unexpected Exception
+    External --> Resilience : Invalid payload / crash
+    Resilience --> Adapter : Mono.error(RuntimeException)
+    Adapter --> Service : Mono.error(UnknownException)
+    Service --> Controller : Mono.error()
+    Controller -> ErrorHandler
+    ErrorHandler --> Client : 500 INTERNAL_SERVER_ERROR
+end
+
+@enduml

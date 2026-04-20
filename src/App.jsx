@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import FileExplorer from './components/FileExplorer'
 import MarkdownViewer from './components/MarkdownViewer'
+import PlantUMLViewer from './components/PlantUMLViewer'
 import { loadIndex } from './services/fileService'
 
 export default function App() {
@@ -26,10 +27,9 @@ export default function App() {
         />
       </aside>
       <main className="viewer">
-        {selectedDoc
-          ? <MarkdownViewer doc={selectedDoc} />
-          : <p className="placeholder">Select a document to view</p>
-        }
+        {!selectedDoc && <p className="placeholder">Select a document to view</p>}
+        {selectedDoc?.type === 'markdown' && <MarkdownViewer doc={selectedDoc} />}
+        {selectedDoc?.type === 'plantuml' && <PlantUMLViewer doc={selectedDoc} />}
       </main>
     </div>
   )
