@@ -1,19 +1,30 @@
 {
-  "documents": [
+  "tree": [
     {
-      "id": "error-handling",
-      "title": "Error Handling Architecture",
-      "type": "markdown",
-      "path": "docs/error-handling.md",
-      "tags": ["microservice", "resilience"]
-    }
-  ,
-    {
-      "id": "error-handling-flow",
-      "title": "High-Level Error Handling Flow",
-      "type": "plantuml",
-      "path": "docs/error-handling-flow.puml",
-      "tags": ["microservice", "resilience", "diagram"]
+      "id": "backend",
+      "label": "Backend",
+      "children": [
+        {
+          "id": "resilience",
+          "label": "Resilience",
+          "children": [
+            {
+              "id": "error-handling",
+              "title": "Error Handling Architecture",
+              "type": "markdown",
+              "path": "docs/error-handling.md",
+              "tags": ["microservice", "resilience"]
+            },
+            {
+              "id": "error-handling-flow",
+              "title": "High-Level Error Handling Flow",
+              "type": "plantuml",
+              "path": "docs/error-handling-flow.puml",
+              "tags": ["microservice", "resilience", "diagram"]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -5,13 +5,13 @@ import PlantUMLViewer from './components/PlantUMLViewer'
 import { loadIndex } from './services/fileService'
 
 export default function App() {
-  const [documents, setDocuments] = useState([])
+  const [tree, setTree] = useState([])
   const [selectedDoc, setSelectedDoc] = useState(null)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     loadIndex()
-      .then(setDocuments)
+      .then(setTree)
       .catch(err => setError(err.message))
   }, [])
 
@@ -21,7 +21,7 @@ export default function App() {
         <h1 className="app-title">ArchDoc Viewer</h1>
         {error && <p className="error">{error}</p>}
         <FileExplorer
-          documents={documents}
+          tree={tree}
           selected={selectedDoc}
           onSelect={setSelectedDoc}
         />

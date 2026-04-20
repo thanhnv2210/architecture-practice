@@ -38,7 +38,7 @@ body {
   border-bottom: 1px solid #30363d;
 }
 
-/* File Explorer */
+/* File Explorer — Tree View */
 .file-explorer {
   overflow-y: auto;
   flex: 1;
@@ -49,33 +49,116 @@ body {
   list-style: none;
 }
 
-.file-item {
-  padding: 10px 16px;
-  cursor: pointer;
-  border-left: 2px solid transparent;
-  transition: background 0.15s;
-}
-
-.file-item:hover {
-  background: #21262d;
-}
-
-.file-item.active {
-  background: #21262d;
-  border-left-color: #2f81f7;
-}
-
-.file-name {
-  display: block;
-  font-size: 0.9rem;
-  color: #e6edf3;
+/* Search */
+.tree-search {
+  position: relative;
+  padding: 8px 12px;
+  border-bottom: 1px solid #30363d;
   margin-bottom: 4px;
 }
 
-.file-tags {
+.tree-search-input {
+  width: 100%;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 6px 28px 6px 10px;
+  color: #e6edf3;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.tree-search-input:focus {
+  border-color: #2f81f7;
+}
+
+.tree-search-input::placeholder {
+  color: #7d8590;
+}
+
+.tree-search-clear {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #7d8590;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.tree-search-clear:hover {
+  color: #e6edf3;
+}
+
+.tree-no-results {
+  font-size: 0.82rem;
+  color: #7d8590;
+  padding: 12px 16px;
+}
+
+/* Folder */
+.tree-folder-btn {
   display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #7d8590;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.15s;
+}
+
+.tree-folder-btn:hover {
+  color: #e6edf3;
+}
+
+.tree-arrow {
+  font-size: 0.7rem;
+  width: 10px;
+  flex-shrink: 0;
+}
+
+/* Document */
+.tree-doc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: #c9d1d9;
+  border-left: 2px solid transparent;
+  transition: background 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-doc:hover {
+  background: #21262d;
+  color: #e6edf3;
+}
+
+.tree-doc.active {
+  background: #21262d;
+  border-left-color: #2f81f7;
+  color: #e6edf3;
+}
+
+.tree-doc-icon {
+  font-size: 0.7rem;
+  color: #7d8590;
+  flex-shrink: 0;
 }
 
 .tag {
@@ -195,6 +278,26 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.plantuml-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #7d8590;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.plantuml-toggle:hover {
+  color: #e6edf3;
 }
 
 .plantuml-label {
