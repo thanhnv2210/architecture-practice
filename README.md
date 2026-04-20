@@ -31,6 +31,22 @@ A lightweight static web application to view, render, and enhance architecture d
   * Generate new content
 * 🌙 Developer-friendly UI
 
+## 🏃 Getting Started
+
+**Prerequisites:** Node.js 18+
+
+```bash
+# Install dependencies (first time only)
+npm install
+
+# Start dev server
+npm run dev
+```
+
+Open http://localhost:5173 in your browser.
+
+To stop, press `Ctrl+C` in the terminal.
+
 ## 📁 Project Structure
 
 * `/docs` → architecture documents
