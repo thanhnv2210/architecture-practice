@@ -58,6 +58,13 @@
           "type": "markdown",
           "path": "docs/backend/troubleshoot-history.md",
           "tags": ["backend", "troubleshoot", "log"]
+        },
+        {
+          "id": "workspace-config",
+          "title": "Backend Workspace Configuration",
+          "type": "markdown",
+          "path": "docs/backend/workspace-config.md",
+          "tags": ["backend", "workspace", "config"]
         }
       ]
     }
