@@ -18,7 +18,6 @@
 | `mlNetsclickLibVersion` | `ml-netsclick-adapter-lib` | `1.0.0-SNAPSHOT` |
 | `mlForterLibVersion` | `ml-forter-adapter-lib` | `1.0.3-SNAPSHOT` |
 | `mlSmaLibVersion` | `sma-adapter-lib` | `1.2.0-SNAPSHOT` |
-| `mJumioLibVersion` | `ml-jumio-adapter-lib` | `1.0.0-SNAPSHOT` |
 | `mlAuthServiceVersion` | `auth-api` | `3.2.0-SNAPSHOT` |
 | `mlCustomerServiceVersion` | `customer-api` | `3.2.0-SNAPSHOT` |
 | `mlPaymentServiceVersion` | `payment-api` | `1.2.0-SNAPSHOT` |
@@ -48,7 +47,6 @@ Adapter libs are shared building blocks. Each has its own direct `com.singtel.ml
 | `ml-netsclick-adapter-lib` | `ml-hmac-lib` |
 | `ml-forter-adapter-lib` | `ml-hmac-lib` |
 | `sma-adapter-lib` | `ml-hmac-lib` |
-| `ml-jumio-adapter-lib` | `ml-hmac-lib` |
 
 ---
 
@@ -242,7 +240,49 @@ customer-api
 
 ---
 
-## 8. Deprecated Components
+## 8. Active Branch Status
+
+Current branch per active repository and whether `feature/wu_phase3` exists.
+
+| Project | Current Branch | feature/wu_phase3 |
+|---|---|---|
+| `dtone-adapter-lib` | `feature/DASHREMIT-3021` | not found |
+| `forter-adapter-lib` | `feature/DASHREMIT-3021` | not found |
+| `ml-auth-api` | `feature/DASHREMIT-3021` | not found |
+| `ml-auth-service` | `develop` | exists (remote) |
+| `ml-batch-service` | `feature/wu_phase3` | exists (local) |
+| `ml-customer-api` | `develop` | exists (remote) |
+| `ml-customer-service` | `develop` | exists (remote) |
+| `ml-fx-api` | `develop` | exists (remote) |
+| `ml-fx-service` | `feature/DASHREMIT-882` | exists (remote) |
+| `ml-hmac-lib` | `feature/wu_phase3` | exists (local) |
+| `ml-iam-service` | `develop` | exists (remote) |
+| `ml-payment-api` | `release/2.4.1` | not found |
+| `ml-payment-service` | `develop` | not found |
+| `ml-plugin` | `feature/wu_phase3` | exists (local) |
+| `ml-portal-api` | `develop` | exists (remote) |
+| `ml-portal-service` | `develop` | exists (remote) |
+| `ml-product-api` | `develop` | exists (remote) |
+| `ml-product-service` | `feature/DASHREMIT-868` | exists (remote) |
+| `ml-remittance-api` | `develop` | exists (local) |
+| `ml-remittance-service` | `release/3.1.0` | exists (local) |
+| `ml-utility-api` | `develop` | exists (remote) |
+| `ml-utility-service` | `develop` | exists (remote) |
+| `netsclick-adapter-lib` | `feature/DASHREMIT-3021` | not found |
+| `sma-adapter-lib` | `feature/DASHREMIT-3021` | not found |
+| `telepin-adapter-lib` | `develop` | not found |
+| `thunes-adapter-lib` | `develop` | not found |
+| `tranglo-adapter-lib` | `develop` | not found |
+| `wu-adapter-lib` | `feature/DASHREMIT-881` | exists (local) |
+
+**Summary**:
+- Already on `feature/wu_phase3`: `ml-batch-service`, `ml-hmac-lib`, `ml-plugin`
+- Has `feature/wu_phase3` (needs checkout): `ml-auth-service`, `ml-customer-api`, `ml-customer-service`, `ml-fx-api`, `ml-fx-service`, `ml-iam-service`, `ml-portal-api`, `ml-portal-service`, `ml-product-api`, `ml-product-service`, `ml-remittance-api`, `ml-remittance-service`, `ml-utility-api`, `ml-utility-service`, `wu-adapter-lib`
+- No `feature/wu_phase3` (will pull `develop`): `dtone-adapter-lib`, `forter-adapter-lib`, `ml-auth-api`, `ml-payment-api`, `ml-payment-service`, `netsclick-adapter-lib`, `sma-adapter-lib`, `telepin-adapter-lib`, `thunes-adapter-lib`, `tranglo-adapter-lib`
+
+---
+
+## 9. Deprecated Components
 
 The following components are deprecated and should not be used in new development or new service dependencies.
 
@@ -279,3 +319,33 @@ The following components are deprecated and should not be used in new developmen
 - **PluginMgmt**: `1.0.1`
 - **Direct**: `registration-api:${mlVersion}`, `ml-telepin-adapter-lib:${mlVersion}`, `ml-hmac-lib:${mlVersion}`
 - **Note**: Uses `${mlVersion}` — not injected by any PluginMgmt version. **Build will FAIL** unless passed as a `-P` flag or set in a local `gradle.properties`.
+
+---
+
+### ~~jumio-adapter-lib~~
+- **Variable**: `mJumioLibVersion`
+- **Last known version**: `1.0.0-SNAPSHOT`
+- **PluginMgmt**: `2.3.2-SNAPSHOT`
+- **Direct**: `ml-hmac-lib`
+- **Known consumers**: `ml-registration-service` _(deprecated)_
+
+---
+
+### ~~ml-db-migration~~
+- **PluginMgmt**: _(none — plain Gradle project)_
+- **Direct com.singtel.ml Dependencies**: _(none)_
+- **Note**: Database migration scripts only; no internal library dependencies.
+
+---
+
+### ~~ml-registration-api~~
+- **PluginMgmt**: `2.3.2-SNAPSHOT`
+- **Produces artifact**: `registration-api` _(deprecated)_
+- **Direct**: `ml-telepin-adapter-lib`, `ml-hmac-lib`
+
+---
+
+### ~~ml-securedb-migration~~
+- **PluginMgmt**: _(none — plain Gradle project)_
+- **Direct com.singtel.ml Dependencies**: _(none)_
+- **Note**: Secure database migration scripts only; no internal library dependencies.
