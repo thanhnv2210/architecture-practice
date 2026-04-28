@@ -44,6 +44,20 @@
           "type": "markdown",
           "path": "docs/backend/dependency-analysis.md",
           "tags": ["backend", "gradle", "dependencies", "conflict"]
+        },
+        {
+          "id": "activity-history",
+          "title": "Backend Activity History",
+          "type": "markdown",
+          "path": "docs/backend/activity-history.md",
+          "tags": ["backend", "history", "log"]
+        },
+        {
+          "id": "troubleshoot-history",
+          "title": "Backend Troubleshoot History",
+          "type": "markdown",
+          "path": "docs/backend/troubleshoot-history.md",
+          "tags": ["backend", "troubleshoot", "log"]
         }
       ]
     }

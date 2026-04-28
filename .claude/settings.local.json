@@ -4,7 +4,10 @@
       "Bash(cp -r /Users/ThanhNguyen/AI_WS/architecture-practice/arch-doc-viewer/src /Users/ThanhNguyen/AI_WS/architecture-practice/src)",
       "Bash(cp -r /Users/ThanhNguyen/AI_WS/architecture-practice/arch-doc-viewer/public /Users/ThanhNguyen/AI_WS/architecture-practice/public)",
       "Bash(npm install:*)",
-      "Bash(npx vite:*)"
+      "Bash(npx vite:*)",
+      "Bash(command -v git)",
+      "Bash(/usr/bin/git --version)",
+      "Bash(/opt/homebrew/bin/git config:*)"
     ]
   }
 }
