@@ -21,8 +21,29 @@
               "type": "plantuml",
               "path": "docs/error-handling-flow.puml",
               "tags": ["microservice", "resilience", "diagram"]
+            },
+            {
+              "id": "error-classification-layer",
+              "title": "Error Classification Layer",
+              "type": "plantuml",
+              "path": "docs/error-classification-layer.puml",
+              "tags": ["microservice", "resilience", "diagram"]
+            },
+            {
+              "id": "reactive-pipeline",
+              "title": "Reactive Pipeline",
+              "type": "plantuml",
+              "path": "docs/reactive-pipeline.puml",
+              "tags": ["microservice", "resilience", "diagram", "webflux"]
             }
           ]
+        },
+        {
+          "id": "dependency-analysis",
+          "title": "com.singtel.ml Dependency Analysis",
+          "type": "markdown",
+          "path": "docs/backend/dependency-analysis.md",
+          "tags": ["backend", "gradle", "dependencies", "conflict"]
         }
       ]
     }

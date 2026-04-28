@@ -1,0 +1,26 @@
+@startuml
+title Error Classification Strategy
+
+package "Error Model" {
+
+  class BaseException {
+    +errorCode
+    +message
+    +traceId
+  }
+
+  class TechnicalException
+  class BusinessException
+  class IntegrationException
+  class TimeoutException
+  class CircuitBreakerOpenException
+
+  BaseException <|-- TechnicalException
+  BaseException <|-- BusinessException
+  BaseException <|-- IntegrationException
+
+  IntegrationException <|-- TimeoutException
+  IntegrationException <|-- CircuitBreakerOpenException
+}
+
+@enduml

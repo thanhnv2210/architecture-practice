@@ -1,0 +1,53 @@
+Introduction
+- environment: AWS cloud
+- Tech Stack: Spring boot 3 - WebFlux for backend service, Lambda function - Python for some special batch job.  
+- AWS Main module: API Gateway, S3, RDS , Code Pipeline, EKS, Lambda Function
+
+1) API Gateway
+- Core: publish the major APIs to support Web and Mobile application
+- Partner: to handle partner callback
+- Internal: to support internal portal web application.
+
+
+2) Service list:
+iam-service:8098 to generate and cache the bearer token on database
+auth-service:8091 to handle login, request and verify otp, get the public key
+customer-service:8087 to mainly handle the customer and beneficiary
+product-service:8096 to manage the product status
+fx-service:8086 to handle fx calculation
+payment-service:8097 to handle the DTOne 
+remittance-service:8092 to handle remittance for all hub
+utility-service:8094 to provide static data such as country list, public config
+batch-service:8095 to run batch job (will list a detail later)
+portal-service:8099 to work with internal web to support operation team
+
+3) Third Party: 
+TELEPIN as a wallet
+FORTER as a Fraud Check service
+WU as a remittance hub
+THUNES as a remittance hub
+TRANGLO as a remittance hub
+DTOne as a payment hub
+SMA 
+
+4) connectivity:
+
+remittance-service can call: 
+- Services: iam, auth, product, customer, fx, payment, utility, portal
+- AWS: 
++) SQS: Wechat Share Link
++) SES: send email 
+- Third Party: 
++ TELEPIN: for payment, AML scan, 
++ FORTER: verify and update fraud data
++ WU: to remit
++ THUNES: to remit
++ TRANGLO: to remit
+
+
+iam-service:
+- Third-party: 
++ TELEPIN to verify before generate token
+
+auth-service:
+- Services: iam-service

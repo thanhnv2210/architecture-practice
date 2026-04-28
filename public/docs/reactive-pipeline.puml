@@ -1,0 +1,30 @@
+@startuml
+title Reactive Pipeline Error Handling
+
+participant "Service"
+participant "Adapter"
+participant "WebClient"
+
+Service -> Adapter : callExternal()
+
+Adapter -> WebClient : GET /external-api
+
+note right of Adapter
+Mono<Response>
+  .timeout(Duration)
+  .retryWhen(...)
+  .onErrorMap(...)
+  .onErrorResume(...)
+end note
+
+WebClient --> Adapter : Mono.error(WebClientException)
+
+Adapter -> Adapter : onErrorMap()
+Adapter -> Adapter : wrap to IntegrationException
+
+Adapter --> Service : Mono.error()
+
+Service -> Service : onErrorResume()
+Service --> Service : fallback OR propagate
+
+@enduml

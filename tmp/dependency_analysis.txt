@@ -1,0 +1,10 @@
+- Workspace folder /Users/ThanhNguyen/CurrentWS/
+- focus on gradle project only
+- Read all dependencies in build.gradle at the root folder of project, focus on artifact of com.singtel.ml only
+- then make the document about dependency relationship and save in a file on the current repository
+- mark the following projects as deprecated:
+    +) ml-spring-auth-service
+    +) ml-keycloak-service
+    +) registration-api
+    +) ml-registration-service
+    +) ml-registration-service-util
