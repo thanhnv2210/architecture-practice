@@ -7,7 +7,19 @@
       "Bash(npx vite:*)",
       "Bash(command -v git)",
       "Bash(/usr/bin/git --version)",
-      "Bash(/opt/homebrew/bin/git config:*)"
+      "Bash(/opt/homebrew/bin/git config:*)",
+      "Bash(chmod:*)",
+      "Bash(bash /Users/ThanhNguyen/AI_WS/architecture-practice/tmp/build_all.sh)",
+      "Bash(./gradlew --version)",
+      "Bash(grep -v \"^$\")",
+      "Bash(for svc:*)",
+      "Bash(do echo:*)",
+      "Bash(git -C /Users/ThanhNguyen/CurrentWS/ml-plugin branch --show-current)",
+      "Bash(for p:*)",
+      "Bash(./gradlew build:*)",
+      "Bash(/Users/ThanhNguyen/CurrentWS/ml-iam-service/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-iam-service build)",
+      "Bash(/Users/ThanhNguyen/CurrentWS/ml-iam-service/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-iam-service build --stacktrace)",
+      "Bash(/Users/ThanhNguyen/CurrentWS/ml-iam-service/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-iam-service clean build)"
     ]
   }
 }

@@ -78,6 +78,73 @@ Reference for active repositories, branch rules, and tooling setup under `/Users
 
 ---
 
+## Build Constraints
+
+### Plugin Version
+
+| Branch | `PluginMgmt` version | Status |
+|---|---|---|
+| `develop` | `3.1.0-SNAPSHOT` | **current baseline** |
+| `feature/wu_phase3` | `3.2.0-SNAPSHOT` | feature branch only |
+
+- All active repos on `develop` must use `PluginMgmt:3.1.0-SNAPSHOT` in `buildscript.classpath`.
+- Check: `grep -r "PluginMgmt" build.gradle`
+
+### Gradle Version
+
+| Condition | Minimum Gradle |
+|---|---|
+| Any project using `PluginMgmt 3.1.0+` (Spring Boot 3.x / `spring-core 6.2+`) | **8.5** (tested: 8.11.1) |
+| Legacy projects (Spring Boot 2.x) | 7.x acceptable |
+
+- Gradle 7.x **cannot** instrument Java 21 multi-release JARs (`VirtualThreadDelegate` in `spring-core 6.2+`). Build fails at configure phase.
+- Check: `grep distributionUrl gradle/wrapper/gradle-wrapper.properties`
+- Known affected repo upgraded: `ml-iam-service` (7.6 → 8.11.1 on 2026-04-29)
+
+### Build Strategy
+
+| Project type | Gradle command | Notes |
+|---|---|---|
+| Plugins (`ml-plugin`) | `build publishToMavenLocal` | No Spring Boot plugin |
+| Adapter libs | `build publishToMavenLocal -x bootJar -x bootRun` | Skip bootJar only if task exists |
+| API modules | `build publishToMavenLocal` | No bootJar task |
+| Services | `build` | No `publishToMavenLocal` — nothing consumes services as Maven deps |
+
+Auto-detect whether to skip `bootJar`:
+```bash
+if ./gradlew tasks --all 2>/dev/null | grep -q "^bootJar "; then
+    ./gradlew build publishToMavenLocal -x bootJar -x bootRun
+else
+    ./gradlew build publishToMavenLocal
+fi
+```
+
+### `gradlew` CRLF
+
+All `gradlew` files have Windows CRLF endings and must be stripped after every checkout:
+```bash
+sed -i '' 's/\r//' gradlew
+```
+
+See `troubleshoot-history.md` for full details on all issues above.
+
+---
+
+## Build Order
+
+Dependencies must be built and published before their consumers. Full order:
+
+1. `ml-plugin`
+2. `ml-hmac-lib`
+3. Adapter libs (hmac only): `telepin-adapter-lib`, `wu-adapter-lib`, `tranglo-adapter-lib`, `netsclick-adapter-lib`, `forter-adapter-lib`, `sma-adapter-lib`
+4. API modules (hmac only): `ml-auth-api`, `ml-payment-api`, `ml-fx-api`, `ml-product-api`, `ml-utility-api`, `ml-portal-api`
+5. Cross-deps: `ml-remittance-api` → `thunes-adapter-lib` → `dtone-adapter-lib` → `ml-customer-api`
+6. Services: `ml-auth-service`, `ml-iam-service`, `ml-portal-service`, `ml-payment-service`, `ml-utility-service`, `ml-customer-service`, `ml-product-service`, `ml-fx-service`, `ml-remittance-service`, `ml-batch-service`
+
+Build script: `architecture-practice/tmp/build_all.sh`
+
+---
+
 ## Tooling
 
 | Tool | Path |

@@ -114,3 +114,174 @@ This ensures any shell (interactive or restricted) can find `aws` when git calls
 
 All 10 repositories that needed `git pull origin develop`:
 `dtone-adapter-lib`, `forter-adapter-lib`, `ml-auth-api`, `ml-payment-api`, `ml-payment-service`, `netsclick-adapter-lib`, `sma-adapter-lib`, `telepin-adapter-lib`, `thunes-adapter-lib`, `tranglo-adapter-lib`
+
+---
+
+## 2026-04-29
+
+### Full build pipeline for all 28 `com.singtel.ml` repositories
+
+**Context**: Building all active repos in dependency order (`build publishToMavenLocal` for libs/APIs, `build` for services) after switching all branches to `develop`.
+
+---
+
+### Issue 1 — `gradlew` CRLF line endings break execution on macOS
+
+#### Symptom
+
+```
+env: sh\r: No such file or directory
+exit code 127
+```
+
+#### Root Cause
+
+All `gradlew` files in the repos have Windows CRLF line endings (`\r\n`). On macOS/Linux, the shebang line `#!/usr/bin/env sh\r` is passed literally including `\r`, so the OS cannot find `sh\r`.
+
+This also recurs after every `git checkout` because the repos have `core.autocrlf` enabled (or no `.gitattributes` forcing LF for `gradlew`).
+
+#### Fix
+
+Strip `\r` from all `gradlew` files before running any build:
+
+```bash
+sed -i '' 's/\r//' /path/to/repo/gradlew
+```
+
+Apply to all repos at once:
+
+```bash
+for p in <all-projects>; do
+  sed -i '' 's/\r//' /Users/ThanhNguyen/CurrentWS/$p/gradlew
+done
+```
+
+**Note**: Must be re-applied after every `git checkout` or `git pull` that touches `gradlew`.
+
+---
+
+### Issue 2 — `tranglo-adapter-lib` fails with "Unable to find a single main class"
+
+#### Symptom
+
+```
+> Task :resolveMainClassName FAILED
+Unable to find a single main class from the following candidates
+[com.singtel.ml.tranglo.adapter.TrangloServiceApplicationV2,
+ com.singtel.ml.tranglo.adapter.TrangloServiceApplication]
+```
+
+#### Root Cause
+
+The Spring Boot plugin is applied in `tranglo-adapter-lib` (an adapter library, not an application). It found two classes with `main()` and couldn't resolve which one to use for the fat JAR.
+
+#### Fix
+
+Skip `bootJar` and `bootRun` tasks. Adapter libs don't need a fat JAR:
+
+```bash
+./gradlew build publishToMavenLocal -x bootJar -x bootRun
+```
+
+**Caveat**: `-x bootJar` only works if `bootJar` task exists. Passing it to a project without the Spring Boot plugin causes `Task 'bootJar' not found`. Detect first:
+
+```bash
+if ./gradlew tasks --all 2>/dev/null | grep -q "^bootJar "; then
+    extra_flags="-x bootJar -x bootRun"
+fi
+./gradlew build publishToMavenLocal $extra_flags
+```
+
+---
+
+### Issue 3 — Services fail `publishToMavenLocal` with "No such file or directory" on jar
+
+#### Symptom
+
+```
+Execution failed for task ':generateMetadataFileForMavenPublication'.
+> java.io.FileNotFoundException: .../auth-service-2.3.1-SNAPSHOT.jar (No such file or directory)
+```
+
+#### Root Cause
+
+When `-x bootJar` is passed to a Spring Boot service, the jar artifact is never created (Spring Boot replaces the regular `jar` task with `bootJar`). The `publishToMavenLocal` task still tries to reference the jar file, which doesn't exist.
+
+#### Fix
+
+Services are standalone applications — nothing depends on them as a Maven artifact. Use `build` only, without `publishToMavenLocal`:
+
+```bash
+# Libs and API modules — publish so downstream can resolve them
+./gradlew build publishToMavenLocal -x bootJar -x bootRun
+
+# Services — build only (bootJar runs normally)
+./gradlew build
+```
+
+---
+
+### Issue 4 — `ml-iam-service` fails at configure phase with Gradle cache instrumentation error
+
+#### Symptom
+
+```
+A problem occurred configuring root project 'iam-service'.
+> java.util.concurrent.ExecutionException: org.gradle.api.GradleException:
+  Failed to create Jar file .../spring-core-6.2.11.jar.
+Caused by: java.io.IOException: Failed to process the entry
+  'META-INF/versions/21/org/springframework/core/task/VirtualThreadDelegate.class'
+```
+
+#### Root Cause
+
+`ml-iam-service` used **Gradle 7.6** (`gradle-wrapper.properties`), while Spring Boot 3.x (injected by `PluginMgmt 3.1.0-SNAPSHOT`) pulls in `spring-core-6.2.11`. That JAR is a **multi-release JAR** containing Java 21 bytecode (`VirtualThreadDelegate.class`). Gradle 7.6's `InstrumentingClasspathFileTransformer` cannot process Java 21 class files and fails at the configure phase — before any source is compiled.
+
+This is not fixable by `clean`, cache clearing, or `--no-daemon` because the failure happens during Gradle's own classpath instrumentation, not the project build.
+
+#### Fix
+
+Upgrade `ml-iam-service`'s Gradle wrapper to **8.x** (minimum 8.5, tested on 8.11.1):
+
+```
+# gradle/wrapper/gradle-wrapper.properties
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.11.1-bin.zip
+```
+
+```bash
+sed -i '' 's|gradle-7.6-bin.zip|gradle-8.11.1-bin.zip|g' \
+  /Users/ThanhNguyen/CurrentWS/ml-iam-service/gradle/wrapper/gradle-wrapper.properties
+```
+
+**Constraint**: Any project using `PluginMgmt 3.1.0-SNAPSHOT` or newer (which brings in Spring Boot 3.x → `spring-core 6.2+`) must use **Gradle 8.5+**. Gradle 7.x is incompatible.
+
+---
+
+### Issue 5 — 13 repos using stale `PluginMgmt` versions
+
+#### Symptom
+
+Build succeeds but dependency resolution may pick older transitive versions than intended, causing runtime class-not-found or API mismatch.
+
+#### Root Cause
+
+`develop` branch of `ml-plugin` is **`3.1.0-SNAPSHOT`**, but 13 repos were still referencing older versions (`2.5.x`, `3.0.0-SNAPSHOT`) in their `build.gradle` `buildscript.classpath`.
+
+#### Fix
+
+Update `buildscript.classpath` in `build.gradle` for each outdated repo:
+
+```groovy
+// build.gradle — buildscript block
+classpath "com.singtel.ml.plugin:PluginMgmt:3.1.0-SNAPSHOT"
+```
+
+One-liner to upgrade all at once:
+
+```bash
+sed -i '' 's|com.singtel.ml.plugin:PluginMgmt:[0-9.]*-SNAPSHOT|com.singtel.ml.plugin:PluginMgmt:3.1.0-SNAPSHOT|g' \
+  /Users/ThanhNguyen/CurrentWS/<project>/build.gradle
+```
+
+**Affected repos upgraded on 2026-04-29**:
+`telepin-adapter-lib`, `thunes-adapter-lib`, `tranglo-adapter-lib`, `netsclick-adapter-lib`, `forter-adapter-lib`, `sma-adapter-lib`, `dtone-adapter-lib`, `ml-auth-api`, `ml-payment-api`, `ml-portal-api`, `ml-auth-service`, `ml-iam-service`, `ml-payment-service`
