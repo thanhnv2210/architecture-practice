@@ -19,7 +19,20 @@
       "Bash(./gradlew build:*)",
       "Bash(/Users/ThanhNguyen/CurrentWS/ml-iam-service/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-iam-service build)",
       "Bash(/Users/ThanhNguyen/CurrentWS/ml-iam-service/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-iam-service build --stacktrace)",
-      "Bash(/Users/ThanhNguyen/CurrentWS/ml-iam-service/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-iam-service clean build)"
+      "Bash(/Users/ThanhNguyen/CurrentWS/ml-iam-service/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-iam-service clean build)",
+      "Bash(/Users/ThanhNguyen/CurrentWS/ml-auth-api/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-auth-api build publishToMavenLocal)",
+      "Bash(/Users/ThanhNguyen/CurrentWS/ml-auth-service/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-auth-service build)",
+      "Bash(mkdir -p ~/.gradle/init.d)",
+      "Read(//Users/ThanhNguyen/.gradle/**)",
+      "Bash(/Users/ThanhNguyen/CurrentWS/ml-hmac-lib/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-hmac-lib dependencies --configuration compileClasspath)",
+      "Bash(WS=\"/Users/ThanhNguyen/CurrentWS\")",
+      "Bash(do)",
+      "Bash(echo \"=== $svc ===\")",
+      "Bash(git -C \"$WS/$svc\" log --oneline -5)",
+      "Bash(done)",
+      "Bash(WS=\"/Users/ThanhNguyen/CurrentWS\" for svc in ml-iam-service ml-remittance-service)",
+      "Bash(do GIT_ASKPASS=\"\" GIT_TERMINAL_PROMPT=0 /opt/homebrew/bin/git -C \"$WS/$svc\" -c \"credential.https://git-codecommit.ap-southeast-1.amazonaws.com.helper=!/opt/homebrew/bin/aws codecommit credential-helper $@\" pull origin feature/wu_phase3)",
+      "Bash(/Users/ThanhNguyen/CurrentWS/ml-remittance-service/gradlew -p /Users/ThanhNguyen/CurrentWS/ml-remittance-service build)"
     ]
   }
 }

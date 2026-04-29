@@ -59,12 +59,38 @@ build() {
     return $rc
 }
 
-# ── TIERS 1-4: Already passed — skip ─────────────────────────────────────────
-log "### TIERS 1-4: All passed (skipped)"
-PASSED+=(ml-plugin ml-hmac-lib telepin-adapter-lib wu-adapter-lib tranglo-adapter-lib
-  netsclick-adapter-lib forter-adapter-lib sma-adapter-lib ml-auth-api ml-payment-api
-  ml-fx-api ml-product-api ml-utility-api ml-portal-api ml-remittance-api
-  thunes-adapter-lib dtone-adapter-lib ml-customer-api)
+# ── TIER 1: Plugin + Root lib ─────────────────────────────────────────────────
+log "### TIER 1: Plugin + Root lib"
+build "ml-plugin"        || exit 1
+build "ml-hmac-lib"      || exit 1
+
+# ── TIER 2: Adapter libs (depend only on ml-hmac-lib) ────────────────────────
+log ""
+log "### TIER 2: Adapter libs"
+build "telepin-adapter-lib"   || exit 1
+build "wu-adapter-lib"        || exit 1
+build "tranglo-adapter-lib"   || exit 1
+build "netsclick-adapter-lib" || exit 1
+build "forter-adapter-lib"    || exit 1
+build "sma-adapter-lib"       || exit 1
+
+# ── TIER 3: API modules (depend only on ml-hmac-lib) ─────────────────────────
+log ""
+log "### TIER 3: API modules"
+build "ml-auth-api"     || exit 1
+build "ml-payment-api"  || exit 1
+build "ml-fx-api"       || exit 1
+build "ml-product-api"  || exit 1
+build "ml-utility-api"  || exit 1
+build "ml-portal-api"   || exit 1
+
+# ── TIER 4: Cross-dependent libs/APIs ────────────────────────────────────────
+log ""
+log "### TIER 4: Cross-dependent libs/APIs"
+build "ml-remittance-api"  || exit 1
+build "thunes-adapter-lib" || exit 1
+build "dtone-adapter-lib"  || exit 1
+build "ml-customer-api"    || exit 1
 
 # ── TIER 5: Services (build only, no publishToMavenLocal) ────────────────────
 log ""

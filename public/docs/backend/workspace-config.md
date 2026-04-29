@@ -7,9 +7,12 @@ Reference for active repositories, branch rules, and tooling setup under `/Users
 ## Branch Operation Rules
 
 1. Check if `feature/wu_phase3` exists (local or remote)
-2. If yes → `git checkout feature/wu_phase3`
+2. If yes → `git checkout feature/wu_phase3` and pull
 3. If no → `git checkout develop && git pull origin develop`
 4. If local changes detected before switching → `git stash save "from claude"`
+
+> **Current active context (2026-04-29)**: 18 repos on `feature/wu_phase3`, 10 repos on `develop` (no feature branch exists for those).
+> After switching to feature branch, re-apply CRLF fix: `sed -i '' 's/\r//' gradlew`
 
 ---
 
@@ -17,36 +20,38 @@ Reference for active repositories, branch rules, and tooling setup under `/Users
 
 28 active `com.singtel.ml` projects. Excludes: `tmp/`, deprecated, and non-`com.singtel.ml` projects.
 
-| # | Project | feature/wu_phase3 | Default Action |
-|---|---|---|---|
-| 1 | `dtone-adapter-lib` | not found | pull `develop` |
-| 2 | `forter-adapter-lib` | not found | pull `develop` |
-| 3 | `ml-auth-api` | not found | pull `develop` |
-| 4 | `ml-auth-service` | exists | checkout `feature/wu_phase3` |
-| 5 | `ml-batch-service` | exists | checkout `feature/wu_phase3` |
-| 6 | `ml-customer-api` | exists | checkout `feature/wu_phase3` |
-| 7 | `ml-customer-service` | exists | checkout `feature/wu_phase3` |
-| 8 | `ml-fx-api` | exists | checkout `feature/wu_phase3` |
-| 9 | `ml-fx-service` | exists | checkout `feature/wu_phase3` |
-| 10 | `ml-hmac-lib` | exists | checkout `feature/wu_phase3` |
-| 11 | `ml-iam-service` | exists | checkout `feature/wu_phase3` |
-| 12 | `ml-payment-api` | not found | pull `develop` |
-| 13 | `ml-payment-service` | not found | pull `develop` |
-| 14 | `ml-plugin` | exists | checkout `feature/wu_phase3` |
-| 15 | `ml-portal-api` | exists | checkout `feature/wu_phase3` |
-| 16 | `ml-portal-service` | exists | checkout `feature/wu_phase3` |
-| 17 | `ml-product-api` | exists | checkout `feature/wu_phase3` |
-| 18 | `ml-product-service` | exists | checkout `feature/wu_phase3` |
-| 19 | `ml-remittance-api` | exists | checkout `feature/wu_phase3` |
-| 20 | `ml-remittance-service` | exists | checkout `feature/wu_phase3` |
-| 21 | `ml-utility-api` | exists | checkout `feature/wu_phase3` |
-| 22 | `ml-utility-service` | exists | checkout `feature/wu_phase3` |
-| 23 | `netsclick-adapter-lib` | not found | pull `develop` |
-| 24 | `sma-adapter-lib` | not found | pull `develop` |
-| 25 | `telepin-adapter-lib` | not found | pull `develop` |
-| 26 | `thunes-adapter-lib` | not found | pull `develop` |
-| 27 | `tranglo-adapter-lib` | not found | pull `develop` |
-| 28 | `wu-adapter-lib` | exists | checkout `feature/wu_phase3` |
+Last updated: 2026-04-29
+
+| # | Project | Active Branch | PluginMgmt | feature/wu_phase3 | Note |
+|---|---|---|---|---|---|
+| 1 | `ml-plugin` | `feature/wu_phase3` | N/A (is the plugin) | exists | |
+| 2 | `ml-hmac-lib` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 3 | `telepin-adapter-lib` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 4 | `wu-adapter-lib` | `feature/wu_phase3` | `3.1.0-SNAPSHOT` | exists | ⚠️ Feature branch not upgraded to 3.2.0 |
+| 5 | `tranglo-adapter-lib` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 6 | `netsclick-adapter-lib` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 7 | `forter-adapter-lib` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 8 | `sma-adapter-lib` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 9 | `ml-auth-api` | `develop` | `3.2.0-SNAPSHOT` | not found | ⚠️ Manually upgraded to 3.2.0 to publish `auth-api:3.2.0-SNAPSHOT` for feature branch services |
+| 10 | `ml-payment-api` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 11 | `ml-fx-api` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 12 | `ml-product-api` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 13 | `ml-utility-api` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 14 | `ml-portal-api` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 15 | `ml-remittance-api` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 16 | `thunes-adapter-lib` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 17 | `dtone-adapter-lib` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 18 | `ml-customer-api` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 19 | `ml-auth-service` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 20 | `ml-iam-service` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | Gradle wrapper upgraded to 8.11.1 (was 7.6) |
+| 21 | `ml-portal-service` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 22 | `ml-payment-service` | `develop` | `3.1.0-SNAPSHOT` | not found | No feature branch |
+| 23 | `ml-utility-service` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 24 | `ml-customer-service` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 25 | `ml-product-service` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 26 | `ml-fx-service` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | ⚠️ Has uncommitted local changes — could not pull |
+| 27 | `ml-remittance-service` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
+| 28 | `ml-batch-service` | `feature/wu_phase3` | `3.2.0-SNAPSHOT` | exists | |
 
 ---
 
@@ -127,6 +132,65 @@ sed -i '' 's/\r//' gradlew
 ```
 
 See `troubleshoot-history.md` for full details on all issues above.
+
+---
+
+## Isolating the Build Environment (Disabling S3 Maven Repository)
+
+The S3 repository `s3://ml-maven-repository/maven` is declared directly in each project's `build.gradle` (buildscript, dependency resolution, and publishing blocks). To disable it without any code change, use a Gradle init script.
+
+### How to disable
+
+Create the file `~/.gradle/init.d/disable-s3-repo.gradle`:
+
+```groovy
+allprojects {
+    buildscript {
+        repositories {
+            all { repo ->
+                if (repo instanceof MavenArtifactRepository && repo.url.toString().startsWith("s3://")) {
+                    remove(repo)
+                    logger.lifecycle("[init] Disabled S3 buildscript repo: ${repo.url}")
+                }
+            }
+        }
+    }
+    repositories {
+        all { repo ->
+            if (repo instanceof MavenArtifactRepository && repo.url.toString().startsWith("s3://")) {
+                remove(repo)
+                logger.lifecycle("[init] Disabled S3 dependency repo: ${repo.url}")
+            }
+        }
+    }
+    plugins.withId("maven-publish") {
+        publishing {
+            repositories {
+                all { repo ->
+                    if (repo instanceof MavenArtifactRepository && repo.url.toString().startsWith("s3://")) {
+                        remove(repo)
+                        logger.lifecycle("[init] Disabled S3 publish repo: ${repo.url}")
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+Gradle automatically loads every `*.gradle` file in `~/.gradle/init.d/` before any project build. The `all { repo -> }` handler fires for each repository as it is registered and removes it if it is an S3 URL — covering all three declaration sites per project.
+
+### Toggle
+
+```bash
+# Block S3 (file exists)
+ls ~/.gradle/init.d/disable-s3-repo.gradle
+
+# Re-enable S3 (delete the file)
+rm ~/.gradle/init.d/disable-s3-repo.gradle
+```
+
+No git commits or project file changes required.
 
 ---
 
