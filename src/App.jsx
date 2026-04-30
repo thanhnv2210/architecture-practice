@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import FileExplorer from './components/FileExplorer'
 import MarkdownViewer from './components/MarkdownViewer'
 import PlantUMLViewer from './components/PlantUMLViewer'
+import AuthGuard from './components/AuthGuard'
 import { loadIndex } from './services/fileService'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
   }, [])
 
   return (
+    <AuthGuard>
     <div className="app">
       <aside className="sidebar">
         <h1 className="app-title">ArchDoc Viewer</h1>
@@ -32,5 +34,6 @@ export default function App() {
         {selectedDoc?.type === 'plantuml' && <PlantUMLViewer doc={selectedDoc} />}
       </main>
     </div>
+    </AuthGuard>
   )
 }
